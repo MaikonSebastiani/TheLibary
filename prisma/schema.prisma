@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Livro {
+  id            Int             @id @default(autoincrement()) @map("Codl")
+  titulo        String          @map("Titulo") @db.VarChar(40)
+  editora       String          @map("Editora") @db.VarChar(40)
+  edicao        Int             @map("Edicao")
+  anoPublicacao String          @map("AnoPublicacao") @db.VarChar(4)
+  valor         Decimal         @map("Valor") @db.Decimal(10, 2)
+  autores       LivroAutor[]
+  assuntos      LivroAssunto[]
+
+  @@map("Livro")
+}
+
+model Autor {
+  id     Int          @id @default(autoincrement()) @map("CodAu")
+  nome   String       @map("Nome") @db.VarChar(40)
+  livros LivroAutor[]
+
+  @@map("Autor")
+}
+
+model Assunto {
+  id        Int            @id @default(autoincrement()) @map("codAs")
+  descricao String         @map("Descricao") @db.VarChar(20)
+  livros    LivroAssunto[]
+
+  @@map("Assunto")
+}
+
+model LivroAutor {
+  livroId Int @map("Livro_Codl")
+  autorId Int @map("Autor_CodAu")
+  livro   Livro @relation(fields: [livroId], references: [id], onDelete: Cascade)
+  autor   Autor @relation(fields: [autorId], references: [id], onDelete: Restrict)
+
+  @@id([livroId, autorId])
+  @@index([autorId])
+  @@map("Livro_Autor")
+}
+
+model LivroAssunto {
+  livroId   Int @map("Livro_Codl")
+  assuntoId Int @map("Assunto_codAs")
+  livro     Livro   @relation(fields: [livroId], references: [id], onDelete: Cascade)
+  assunto   Assunto @relation(fields: [assuntoId], references: [id], onDelete: Restrict)
+
+  @@id([livroId, assuntoId])
+  @@index([assuntoId])
+  @@map("Livro_Assunto")
+}
