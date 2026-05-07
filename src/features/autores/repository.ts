@@ -19,6 +19,18 @@ function handlePrismaError(error: unknown): never {
   throw error;
 }
 
+export async function countAutoresByIds(ids: number[]) {
+  if (ids.length === 0) {
+    return 0;
+  }
+
+  return prisma.autor.count({
+    where: {
+      id: { in: ids },
+    },
+  });
+}
+
 export async function listAutores(search?: string) {
   const term = search?.trim();
 

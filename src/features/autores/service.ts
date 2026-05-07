@@ -1,5 +1,6 @@
-import { NotFoundError } from "@/lib/errors";
+import { ConflictError, NotFoundError } from "@/lib/errors";
 import {
+  countAutoresByIds,
   createAutor,
   deleteAutor,
   getAutorById,
@@ -10,6 +11,24 @@ import type { AutorInput } from "./schemas";
 
 export async function findAllAutores(search?: string) {
   return listAutores(search);
+}
+
+export async function ensureAutoresExist(ids: number[]) {
+  const uniqueIds = Array.from(new Set(ids));
+
+  if (uniqueIds.length === 0) {
+    throw new ConflictError(
+      "Selecione ao menos um autor cadastrado para vincular ao livro."
+    );
+  }
+
+  const found = await countAutoresByIds(uniqueIds);
+
+  if (found !== uniqueIds.length) {
+    throw new ConflictError(
+      "Um ou mais autores selecionados nao foram encontrados. Atualize a pagina e revise a selecao."
+    );
+  }
 }
 
 export async function findAutorById(id: number) {

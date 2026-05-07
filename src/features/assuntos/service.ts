@@ -1,5 +1,6 @@
-import { NotFoundError } from "@/lib/errors";
+import { ConflictError, NotFoundError } from "@/lib/errors";
 import {
+  countAssuntosByIds,
   createAssunto,
   deleteAssunto,
   getAssuntoById,
@@ -10,6 +11,24 @@ import type { AssuntoInput } from "./schemas";
 
 export async function findAllAssuntos(search?: string) {
   return listAssuntos(search);
+}
+
+export async function ensureAssuntosExist(ids: number[]) {
+  const uniqueIds = Array.from(new Set(ids));
+
+  if (uniqueIds.length === 0) {
+    throw new ConflictError(
+      "Selecione ao menos um assunto cadastrado para classificar o livro."
+    );
+  }
+
+  const found = await countAssuntosByIds(uniqueIds);
+
+  if (found !== uniqueIds.length) {
+    throw new ConflictError(
+      "Um ou mais assuntos selecionados nao foram encontrados. Atualize a pagina e revise a selecao."
+    );
+  }
 }
 
 export async function findAssuntoById(id: number) {

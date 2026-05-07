@@ -19,6 +19,18 @@ function handlePrismaError(error: unknown): never {
   throw error;
 }
 
+export async function countAssuntosByIds(ids: number[]) {
+  if (ids.length === 0) {
+    return 0;
+  }
+
+  return prisma.assunto.count({
+    where: {
+      id: { in: ids },
+    },
+  });
+}
+
 export async function listAssuntos(search?: string) {
   const term = search?.trim();
 
