@@ -8,8 +8,8 @@ import {
 } from "./repository";
 import type { AutorInput } from "./schemas";
 
-export async function findAllAutores() {
-  return listAutores();
+export async function findAllAutores(search?: string) {
+  return listAutores(search);
 }
 
 export async function findAutorById(id: number) {

@@ -7,8 +7,13 @@ import { findAllAutores } from "@/features/autores/service";
 
 export const dynamic = "force-dynamic";
 
-export default async function AutoresPage() {
-  const autores = await findAllAutores();
+type AutoresPageProps = Readonly<{
+  searchParams: Promise<{ q?: string }>;
+}>;
+
+export default async function AutoresPage({ searchParams }: AutoresPageProps) {
+  const { q } = await searchParams;
+  const autores = await findAllAutores(q);
 
   return (
     <PageShell
@@ -24,7 +29,7 @@ export default async function AutoresPage() {
         </Button>
       </div>
 
-      <AutoresTable autores={autores} />
+      <AutoresTable autores={autores} searchTerm={q} />
     </PageShell>
   );
 }

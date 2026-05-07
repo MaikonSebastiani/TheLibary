@@ -1,38 +1,38 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { ConflictError, NotFoundError } from "@/lib/errors";
 import { prisma } from "@/lib/prisma";
-import type { AutorInput } from "./schemas";
+import type { AssuntoInput } from "./schemas";
 
 function handlePrismaError(error: unknown): never {
   if (error instanceof PrismaClientKnownRequestError) {
     if (error.code === "P2003") {
       throw new ConflictError(
-        "Nao foi possivel excluir o autor porque ele esta vinculado a um ou mais livros."
+        "Nao foi possivel excluir o assunto porque ele esta vinculado a um ou mais livros."
       );
     }
 
     if (error.code === "P2025") {
-      throw new NotFoundError("Autor nao encontrado.");
+      throw new NotFoundError("Assunto nao encontrado.");
     }
   }
 
   throw error;
 }
 
-export async function listAutores(search?: string) {
+export async function listAssuntos(search?: string) {
   const term = search?.trim();
 
-  return prisma.autor.findMany({
+  return prisma.assunto.findMany({
     where: term
       ? {
-          nome: {
+          descricao: {
             contains: term,
             mode: "insensitive",
           },
         }
       : undefined,
     orderBy: {
-      nome: "asc",
+      descricao: "asc",
     },
     include: {
       _count: {
@@ -44,17 +44,17 @@ export async function listAutores(search?: string) {
   });
 }
 
-export async function getAutorById(id: number) {
-  return prisma.autor.findUnique({
+export async function getAssuntoById(id: number) {
+  return prisma.assunto.findUnique({
     where: {
       id,
     },
   });
 }
 
-export async function createAutor(data: AutorInput) {
+export async function createAssunto(data: AssuntoInput) {
   try {
-    return await prisma.autor.create({
+    return await prisma.assunto.create({
       data,
     });
   } catch (error) {
@@ -62,9 +62,9 @@ export async function createAutor(data: AutorInput) {
   }
 }
 
-export async function updateAutor(id: number, data: AutorInput) {
+export async function updateAssunto(id: number, data: AssuntoInput) {
   try {
-    return await prisma.autor.update({
+    return await prisma.assunto.update({
       where: {
         id,
       },
@@ -75,9 +75,9 @@ export async function updateAutor(id: number, data: AutorInput) {
   }
 }
 
-export async function deleteAutor(id: number) {
+export async function deleteAssunto(id: number) {
   try {
-    return await prisma.autor.delete({
+    return await prisma.assunto.delete({
       where: {
         id,
       },

@@ -16,43 +16,43 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deleteAutorAction } from "../actions";
+import { deleteAssuntoAction } from "../actions";
 
-type AutorTableItem = {
+type AssuntoTableItem = {
   id: number;
-  nome: string;
+  descricao: string;
   _count: {
     livros: number;
   };
 };
 
-type AutoresTableProps = Readonly<{
-  autores: AutorTableItem[];
+type AssuntosTableProps = Readonly<{
+  assuntos: AssuntoTableItem[];
   searchTerm?: string;
 }>;
 
-export function AutoresTable({ autores, searchTerm }: AutoresTableProps) {
+export function AssuntosTable({ assuntos, searchTerm }: AssuntosTableProps) {
   const isSearching = Boolean(searchTerm && searchTerm.length > 0);
 
   return (
     <Card className="border-border bg-card shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between gap-4">
-        <CardTitle>Lista de autores</CardTitle>
-        <ListSearch placeholder="Buscar autores..." />
+        <CardTitle>Lista de assuntos</CardTitle>
+        <ListSearch placeholder="Buscar assuntos..." />
       </CardHeader>
 
       <CardContent className="px-0">
-        {autores.length === 0 ? (
+        {assuntos.length === 0 ? (
           <div className="mx-6 rounded-xl border border-dashed border-border px-6 py-10 text-center">
             <p className="text-sm font-medium text-foreground">
               {isSearching
-                ? "Nenhum autor encontrado para esta busca."
-                : "Nenhum autor cadastrado."}
+                ? "Nenhum assunto encontrado para esta busca."
+                : "Nenhum assunto cadastrado."}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {isSearching
                 ? "Ajuste o termo informado ou limpe o campo de busca."
-                : "Crie o primeiro autor para vincula-lo aos livros."}
+                : "Crie o primeiro assunto para classificar livros."}
             </p>
           </div>
         ) : (
@@ -60,7 +60,7 @@ export function AutoresTable({ autores, searchTerm }: AutoresTableProps) {
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead className="px-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Autor
+                  Assunto
                 </TableHead>
                 <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                   Codigo
@@ -74,34 +74,37 @@ export function AutoresTable({ autores, searchTerm }: AutoresTableProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {autores.map((autor) => {
-                const editHref = `/autores/${autor.id}/editar` as Route;
+              {assuntos.map((assunto) => {
+                const editHref = `/assuntos/${assunto.id}/editar` as Route;
 
                 return (
                   <TableRow
                     className="border-border/60 hover:bg-muted/40"
-                    key={autor.id}
+                    key={assunto.id}
                   >
                     <TableCell className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <InitialsAvatar text={autor.nome} />
+                        <InitialsAvatar text={assunto.descricao} />
                         <span className="font-medium text-foreground">
-                          {autor.nome}
+                          {assunto.descricao}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      #{autor.id}
+                      #{assunto.id}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {autor._count.livros}
+                      {assunto._count.livros}
                     </TableCell>
                     <TableCell className="px-6 py-4 text-right">
                       <div className="flex justify-end">
                         <RowActionsMenu
-                          deleteAction={deleteAutorAction.bind(null, autor.id)}
-                          deleteDescription={`Esta acao removera o autor "${autor.nome}" do cadastro. Autores vinculados a livros nao poderao ser excluidos.`}
-                          deleteTitle="Excluir autor?"
+                          deleteAction={deleteAssuntoAction.bind(
+                            null,
+                            assunto.id
+                          )}
+                          deleteDescription={`Esta acao removera o assunto "${assunto.descricao}" do cadastro. Assuntos vinculados a livros nao poderao ser excluidos.`}
+                          deleteTitle="Excluir assunto?"
                           editHref={editHref}
                         />
                       </div>
