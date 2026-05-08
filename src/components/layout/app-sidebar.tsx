@@ -41,7 +41,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+    <aside className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground print:hidden">
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
           <Library className="size-5" />

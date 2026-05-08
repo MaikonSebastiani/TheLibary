@@ -7,6 +7,7 @@ import {
   CheckboxGroupField,
   type CheckboxGroupOption,
 } from "@/components/shared/checkbox-group-field";
+import { CurrencyInput } from "@/components/shared/currency-input";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -159,20 +160,15 @@ export function LivroForm({
 
             <div className="space-y-2">
               <Label htmlFor="valor">Valor (R$) *</Label>
-              <Input
-                aria-invalid={Boolean(errors?.valor?.[0])}
+              <CurrencyInput
+                ariaInvalid={Boolean(errors?.valor?.[0])}
                 defaultValue={defaultValues?.valor}
                 id="valor"
-                inputMode="decimal"
-                min={0}
                 name="valor"
-                placeholder="0.00"
-                step="0.01"
-                type="number"
               />
               <FieldHint
                 error={errors?.valor?.[0]}
-                hint="Use ponto como separador decimal."
+                hint="Digite apenas numeros - a mascara aplica os centavos automaticamente."
               />
             </div>
           </div>
