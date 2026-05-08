@@ -10,7 +10,6 @@
     "lint": "eslint",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:e2e": "playwright test",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
@@ -28,9 +27,6 @@
     "url": "https://github.com/MaikonSebastiani/TheLibary/issues"
   },
   "homepage": "https://github.com/MaikonSebastiani/TheLibary#readme",
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.8.0",
@@ -56,7 +52,6 @@
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.5",
-    "playwright": "^1.59.1",
     "prisma": "^7.8.0",
     "tailwindcss": "^4.2.4",
     "tsx": "^4.21.0",
