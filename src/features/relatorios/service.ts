@@ -39,11 +39,14 @@ export async function findLivrosPorAutorRelatorio(): Promise<LivrosPorAutorRelat
   const rows = await listLivrosPorAutorView();
 
   const autoresPorId = new Map<number, AutorDoRelatorio>();
-  let valorTotal = 0;
+  const valorPorLivroId = new Map<number, number>();
 
   for (const row of rows) {
     const valorString = String(row.valor);
-    valorTotal += Number(valorString);
+
+    if (!valorPorLivroId.has(row.livro_id)) {
+      valorPorLivroId.set(row.livro_id, Number(valorString));
+    }
 
     const livro: LivroDoRelatorio = {
       id: row.livro_id,
@@ -70,11 +73,15 @@ export async function findLivrosPorAutorRelatorio(): Promise<LivrosPorAutorRelat
   }
 
   const autores = Array.from(autoresPorId.values());
+  const valorTotal = Array.from(valorPorLivroId.values()).reduce(
+    (acumulado, valor) => acumulado + valor,
+    0
+  );
 
   return {
     geradoEm: new Date(),
     totalAutores: autores.length,
-    totalLivros: rows.length,
+    totalLivros: valorPorLivroId.size,
     valorTotal,
     autores,
   };
