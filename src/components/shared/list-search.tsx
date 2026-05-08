@@ -58,7 +58,7 @@ export function ListSearch({
   }, [value, debounceMs, paramName, pathname, router]);
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative w-full sm:w-72", className)}>
       <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
         {isPending ? (
           <Loader2 className="size-4 animate-spin" />
@@ -68,7 +68,7 @@ export function ListSearch({
       </span>
       <input
         aria-label={placeholder}
-        className="h-10 w-72 rounded-full border border-border bg-background pl-11 pr-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/15"
+        className="h-10 w-full rounded-full border border-border bg-background pl-11 pr-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/15"
         onChange={(event) => setValue(event.target.value)}
         placeholder={placeholder}
         type="search"

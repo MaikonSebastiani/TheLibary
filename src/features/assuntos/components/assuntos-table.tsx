@@ -31,19 +31,23 @@ type AssuntosTableProps = Readonly<{
   searchTerm?: string;
 }>;
 
+function pluralizarLivros(total: number) {
+  return total === 1 ? "livro vinculado" : "livros vinculados";
+}
+
 export function AssuntosTable({ assuntos, searchTerm }: AssuntosTableProps) {
   const isSearching = Boolean(searchTerm && searchTerm.length > 0);
 
   return (
     <Card className="border-border bg-card shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between gap-4">
+      <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <CardTitle>Lista de assuntos</CardTitle>
         <ListSearch placeholder="Buscar assuntos..." />
       </CardHeader>
 
       <CardContent className="px-0">
         {assuntos.length === 0 ? (
-          <div className="mx-6 rounded-xl border border-dashed border-border px-6 py-10 text-center">
+          <div className="mx-4 rounded-xl border border-dashed border-border px-4 py-10 text-center sm:mx-6 sm:px-6">
             <p className="text-sm font-medium text-foreground">
               {isSearching
                 ? "Nenhum assunto encontrado para esta busca."
@@ -56,64 +60,98 @@ export function AssuntosTable({ assuntos, searchTerm }: AssuntosTableProps) {
             </p>
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead className="px-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Assunto
-                </TableHead>
-                <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Codigo
-                </TableHead>
-                <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Livros vinculados
-                </TableHead>
-                <TableHead className="px-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Acoes
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            <ul className="space-y-3 px-4 sm:px-6 lg:hidden">
               {assuntos.map((assunto) => {
                 const editHref = `/assuntos/${assunto.id}/editar` as Route;
 
                 return (
-                  <TableRow
-                    className="border-border/60 hover:bg-muted/40"
+                  <li
+                    className="flex items-start gap-3 rounded-xl border border-border/60 bg-background p-4 shadow-xs"
                     key={assunto.id}
                   >
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <InitialsAvatar text={assunto.descricao} />
-                        <span className="font-medium text-foreground">
-                          {assunto.descricao}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      #{assunto.id}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {assunto._count.livros}
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-right">
-                      <div className="flex justify-end">
-                        <RowActionsMenu
-                          deleteAction={deleteAssuntoAction.bind(
-                            null,
-                            assunto.id
-                          )}
-                          deleteDescription={`Esta acao removera o assunto "${assunto.descricao}" do cadastro. Assuntos vinculados a livros nao poderao ser excluidos.`}
-                          deleteTitle="Excluir assunto?"
-                          editHref={editHref}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                    <InitialsAvatar text={assunto.descricao} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium text-foreground">
+                        {assunto.descricao}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        #{assunto.id} · {assunto._count.livros}{" "}
+                        {pluralizarLivros(assunto._count.livros)}
+                      </p>
+                    </div>
+                    <RowActionsMenu
+                      deleteAction={deleteAssuntoAction.bind(null, assunto.id)}
+                      deleteDescription={`Esta acao removera o assunto "${assunto.descricao}" do cadastro. Assuntos vinculados a livros nao poderao ser excluidos.`}
+                      deleteTitle="Excluir assunto?"
+                      editHref={editHref}
+                    />
+                  </li>
                 );
               })}
-            </TableBody>
-          </Table>
+            </ul>
+
+            <div className="hidden lg:block">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="px-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      Assunto
+                    </TableHead>
+                    <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      Codigo
+                    </TableHead>
+                    <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      Livros vinculados
+                    </TableHead>
+                    <TableHead className="px-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      Acoes
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {assuntos.map((assunto) => {
+                    const editHref = `/assuntos/${assunto.id}/editar` as Route;
+
+                    return (
+                      <TableRow
+                        className="border-border/60 hover:bg-muted/40"
+                        key={assunto.id}
+                      >
+                        <TableCell className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <InitialsAvatar text={assunto.descricao} />
+                            <span className="font-medium text-foreground">
+                              {assunto.descricao}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          #{assunto.id}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {assunto._count.livros}
+                        </TableCell>
+                        <TableCell className="px-6 py-4 text-right">
+                          <div className="flex justify-end">
+                            <RowActionsMenu
+                              deleteAction={deleteAssuntoAction.bind(
+                                null,
+                                assunto.id
+                              )}
+                              deleteDescription={`Esta acao removera o assunto "${assunto.descricao}" do cadastro. Assuntos vinculados a livros nao poderao ser excluidos.`}
+                              deleteTitle="Excluir assunto?"
+                              editHref={editHref}
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>
