@@ -17,26 +17,6 @@ export function AppShell({ children }: AppShellProps) {
             <CalendarDays className="size-4" />
             <CurrentDateLabel />
           </div>
-
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                aria-label="Buscar"
-                className="h-10 w-72 rounded-full border border-border bg-card pl-11 pr-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/15"
-                placeholder="Buscar..."
-                type="search"
-              />
-            </div>
-
-            <button
-              aria-label="Notificacoes"
-              className="flex size-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition hover:text-foreground"
-              type="button"
-            >
-              <Bell className="size-4" />
-            </button>
-          </div>
         </header>
 
         <main className="px-10 py-10 print:px-0 print:py-0">{children}</main>

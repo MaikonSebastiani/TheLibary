@@ -180,18 +180,3 @@ Execucao:
 
 ```bash
 npm run test:run
-```
-
-## Troubleshooting
-
-| Sintoma                                                  | Causa provavel                                                            | Solucao                                                                                |
-|----------------------------------------------------------|---------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| `prisma migrate deploy` falha com erro de conexao        | `DATABASE_URL` aponta para o pooler (porta 6543), que nao suporta DDL     | Configure `DIRECT_URL` apontando para a conexao direta (porta 5432) e refaca o deploy  |
-| `Error: P2021` (the table does not exist)                | Migrations nao aplicadas no banco apontado pelo `.env`                    | Rode `npm run prisma:deploy`                                                           |
-| Senha com caracteres especiais quebra a URL de conexao   | Caracteres como `@`, `#`, `%`, `+` precisam ser escapados                 | URL-encode a senha antes de colocar nas variaveis (`encodeURIComponent`)               |
-| Listagem nao reflete dados recem-cadastrados             | Cache do Next                                                             | Paginas usam `dynamic = "force-dynamic"`; force refresh com `Ctrl+Shift+R`             |
-| Excluir um autor/assunto retorna mensagem de conflito    | O registro esta vinculado a um livro                                      | Comportamento esperado (`ON DELETE RESTRICT`); remova o vinculo no livro primeiro      |
-
-## Licenca
-
-MIT.
